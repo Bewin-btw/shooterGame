@@ -5,6 +5,7 @@ public class Weapon : MonoBehaviour
 {
     public Camera playerCamera;
 
+    public int weaponDamage;
     public bool isShooting, readyToShoot;
     bool allowReset = true;
     public float shootingDelay = 2f;
@@ -56,9 +57,15 @@ public class Weapon : MonoBehaviour
     {
         readyToShoot = false;
 
+        SoundManager.Instance.PlayShootingSound();
+
         Vector3 shootingDirection = CalculateDirectionAndSpread().normalized;
 
         GameObject bullet = Instantiate(bulletPrefab, bulletSpawn.position, Quaternion.identity);
+
+        Bullet bul = bullet.GetComponent<Bullet>();
+        bul.bulletDamage = weaponDamage;
+
         bullet.transform.forward = shootingDirection;
         bullet.GetComponent<Rigidbody>().AddForce(shootingDirection * bulletVelocity, ForceMode.Impulse);
         StartCoroutine(DestroyBulletAfterTime(bullet, bulletPrefabLifetime));
@@ -88,7 +95,8 @@ public class Weapon : MonoBehaviour
         RaycastHit hit;
 
         Vector3 targetPoint;
-        if (Physics.Raycast(ray, out hit)){
+        if (Physics.Raycast(ray, out hit))
+        {
             targetPoint = hit.point;
         }
         else
@@ -102,7 +110,7 @@ public class Weapon : MonoBehaviour
 
         return direction + new Vector3(x, y, 0);
     }
-    
+
 
     private IEnumerator DestroyBulletAfterTime(GameObject bullet, float delay)
     {

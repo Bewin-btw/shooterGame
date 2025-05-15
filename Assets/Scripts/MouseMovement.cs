@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class NewMonoBehaviourScript : MonoBehaviour
+public class MouseMovement : MonoBehaviour
 {
     public float mouseSensitivity = 500f;
     float xRotation = 0f;
